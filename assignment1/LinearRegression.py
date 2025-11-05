@@ -24,12 +24,12 @@ class LinearRegression:
         # 1.Determine the number of data points
         m = len(X)
         # 2.Determine the prediction
-        pred = X.dot(self.theta)
+        pred = X @self.theta
         # 3.Calculate the difference between this prediction and the actual value
         err = pred - y
 
         # 4.square this difference
-        sq_err = np.dot(err.T, err)
+        sq_err = err.T @ err
         # 5.Add all these squares together and divide by twice the number of data points
         cost = sq_err / (2 * m)
         reg = (self.lambda_ / (2 * m)) * np.sum(self.theta[1:] ** 2)
@@ -42,7 +42,7 @@ class LinearRegression:
 
         for i in range(self.iter_n):
             # Determine the prediction for the data point, given the current value of theta
-            pred = X.dot(self.theta)
+            pred = X @ self.theta
             # Determine the difference between this forecast and the true value
             err = pred - y
 
@@ -51,7 +51,7 @@ class LinearRegression:
             reg[0] = 0
 
             # Multiply this difference by the ith value of X + reg.
-            gradient = (1 / m) * X.T.dot(err) + reg
+            gradient = (1 / m) * X.T @ err + reg
 
             # Update the ith parameter of theta, namely by decreasing it by
             self.theta = self.theta - self.alpha * gradient
@@ -77,7 +77,7 @@ class LinearRegression:
         else:
             X_scaled = X
         X_scaled = np.c_[np.ones((X.shape[0], 1)), X_scaled]
-        return X_scaled.dot(self.theta)
+        return X_scaled @ self.theta
 
     def reverse_theta(self):
         """
