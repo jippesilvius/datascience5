@@ -10,14 +10,14 @@ class LogisticRegression:
     """
 
     def __init__(self, alpha=0.01, iter_n=1000, lambda_=0.0, scale=True, reg=True):
-        self.alpha = alpha          # Learning rate
-        self.iter_n = iter_n        # Number of iterations
-        self.lambda_ = lambda_      # Regularization parameter
-        self.scale = scale          # Whether to scale features
-        self.reg = reg              # Enable regularization
-        self.scaler = None          # Scaler object
-        self.theta = None           # Parameter vector
-        self.J_history = None       # Cost history
+        self.alpha = alpha
+        self.iter_n = iter_n
+        self.lambda_ = lambda_
+        self.scale = scale
+        self.reg = reg
+        self.scaler = None
+        self.theta = None
+        self.J_history = None
 
     def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
