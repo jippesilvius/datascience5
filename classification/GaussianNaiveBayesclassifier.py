@@ -94,4 +94,4 @@ class CustomGaussianNB:
 
 
     def predict(self, X):
-        self.classify(X, self.prior_list, self.mu, self.sd)
+       return self.classify(X, self.prior_list, self.mu, self.sd)
