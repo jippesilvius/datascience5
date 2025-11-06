@@ -92,7 +92,7 @@ class ID3classifier:
         return tree
 
     def predict_id3(self, tree, sample):
-        
+
         if isinstance(tree, (str, int, np.integer, float)):
             return tree
 

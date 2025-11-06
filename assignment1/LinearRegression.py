@@ -24,7 +24,7 @@ class LinearRegression:
         # 1.Determine the number of data points
         m = len(X)
         # 2.Determine the prediction
-        pred = X @self.theta
+        pred = X @ self.theta
         # 3.Calculate the difference between this prediction and the actual value
         err = pred - y
 
