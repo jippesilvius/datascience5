@@ -10,10 +10,12 @@ class DataProcessor:
     """
     Class that processes the data by doing transformations.
     """
-    def __init__(self, input_file_exp, input_file_meta, cols_to_grab):
+    def __init__(self, input_file_exp, input_file_meta, cols_to_grab, target):
         self.input_file_exp = self.open_exp(input_file_exp)
         self.input_file_meta = self.open_metadata(input_file_meta, cols_to_grab)
+        self.target_column = target
         self.merged_df = None
+
 
     def open_exp(self, input_file_exp):
         """
@@ -119,12 +121,12 @@ class DataProcessor:
         categorical_cols = df_encoded.select_dtypes(include=['object']).columns.tolist()
         print(categorical_cols)
         for col in categorical_cols:
+            if col not in self.target_column:
+                encoder = LabelEncoder()
+                df_encoded[col] = encoder.fit_transform(df_encoded[col])
+                encoders[col] = encoder
 
-            encoder = LabelEncoder()
-            df_encoded[col] = encoder.fit_transform(df_encoded[col])
-            encoders[col] = encoder
-
-        return df, encoders
+        return df_encoded, encoders
 
     def look_at_encode(self, encoders, column_to_see):
         """
