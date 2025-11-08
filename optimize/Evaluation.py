@@ -60,8 +60,17 @@ class Evaluator:
         return model_name
 
     def plot_roc_curve(self, model_name, model):
+
         classes = np.unique(self.y_test)
         y_test_bin = label_binarize(self.y_test, classes=classes)
+
+        if len(classes) < 2:
+            fig = None
+            if model_name in self.models_tested:
+                self.models_tested[model_name].append(fig)
+            else:
+                self.models_tested[model_name] = [model, None, fig]
+            return self.models_tested
 
         if hasattr(model, "predict_proba"):
             y_score = model.predict_proba(self.X_test)
@@ -77,6 +86,8 @@ class Evaluator:
         fig, ax = plt.subplots(figsize=(8,6))
 
         for i, class_label in enumerate(classes):
+            if y_score.shape[1] <= i:
+                continue
             fpr, tpr, _ = roc_curve(y_test_bin[:, i], y_score[:, i])
             auc_score = roc_auc_score(y_test_bin[:, i], y_score[:, i])
             plt.plot(fpr, tpr, lw=2, label=f"Class {class_label}(AUC = {auc_score}" )

@@ -34,7 +34,7 @@ class Voter:
             # Get the label with the highest count.
             majority_label = labels[np.argmax(counts)]
             final_predic.append(majority_label)
-            
+
         return np.array(final_predic)
 
     def choose_vote(self):
