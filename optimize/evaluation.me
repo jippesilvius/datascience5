@@ -1,8 +1,52 @@
-If you want to know my decisions. I dont remember anymore.
-I will fill this in tomorrow after a good nights rest but im working on 6 hours of sleep and its now 4:10.
-Have mercy on my memory/brain for what I decided on everything. Clean-up phase of my code and comments are to be continued. Just like the contents of this evaluation.
+Dataprocessor class:
 
-I tried.
+The Dataprocessor clas was made to perform different feature engineering steps and data transformations to prepare the data so it can further be used by machine learning models for predicting the histology from expression and metadata.
+1. Reading expression and meta data:
+The Metadata contained different kinds of information of data which describes each instance. The specific columns of interest were histology and tumor size since these are things you usually wants to know and will be used for classification.
+We started with transposing the data so we can use it for a PCA analysis down the road.
+We combined both the gene expression and meta data file into one dataframe so it is easier to use.
 
-Sincerely,
-Broken man Jippe
+2. transposing, log_normalize fit_transforming:
+We Transpose the data so that the data has the right orientation for model training. Afterwards we log normalize the data so that the data distribution is normalized/gaussian-like, reduces the influence of outliers so it is easier to model.
+We scale the features so that large-valued features do not count for more than the lower-valued ones. so makes sure all features contribute equally to the model.
+
+3. PCA:
+PCA was used to handle the high dimensionality of the gene expression data. It reduces the number of features while preserving most of the variance, helping to prevent overfitting and improve generalization to unseen data.
+We used n amount of components which would account for 50% of the variance. This is usefull because you are not dependent on hard_coded n_components and keeping only enough components to explain 50% of the variance will greatly reduce the number of features, simplifying the model and speeding up training.
+By doing this we avoid noise that comes from biologically irrelevant fluctuations and avoid overfitting since this means there are fewer components/parameters for the model to learn on.
+
+4. Encoding:
+By encoding the classes and changing classes into numeric data, we can prepare the data for classification models which cant handle labels too well. We return the encoder classes so you are able to reverse the predicted numbers to the labels again.
+
+
+
+Evaluation:
+
+1. remove low encounters:
+By removing low encountered classes we can use the models as intended. Since there could be too little instances of certain classes to be able to train on.
+
+2. Get train test split:
+We are splitting the data so that you can be sure that the test data would not be touched and you get a seperate training set where you can train your models on.
+
+3. Scores:
+To evaluate the models performance, we used multiple metrics instead of relying on accuracy alone. This is important because the dataset can have imbalanced classes , where some types of tumors subtypes appear more often than others.
+We use accuracy to measuer the overall proportion of correct predictions. We used precision to evaluate how many of the predicted positive samples are actually correct. We used Recall/sensitivity on how many actual psoitives were correctly identified, which is handy to asses how well the model captures non-frequent classes.
+We used F1_score to give a good overall metric for uneven class distributions. A confusion matrix to show which labels are often mispredicted in the form of a matrix, and the ROC and AUC curve to show the trade-off between true and false positive rates across different thresholds. The auc summarizes the result into a single number.
+Values closer to 1 indicate stronger discrimination between classes.
+
+
+
+Voting:
+
+1. soft vote:
+Soft voting looks at the average probabilities across all models and the class prediction is the one with the highest average probability.
+
+2. Hard vote:
+Each models prediction has 1 vote and the predicted label with the most votes wins and will be used.
+
+
+
+Pipeline:
+
+My pipeline take a pipeline from sklearn and a param_grid and finds the best hyperparameters from it. You are able to send multiple pipelines at once and will get a list back with the results of each pipeline/param_grid that you wanted tested.
+
